@@ -1,2 +1,0 @@
-# bingo
-bingo with sfml
