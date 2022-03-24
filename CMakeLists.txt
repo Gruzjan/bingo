@@ -29,6 +29,12 @@ if(EMSCRIPTEN)
     ${CMAKE_CURRENT_BINARY_DIR}/index.html
     COPYONLY
   )
+  file(GLOB_RECURSE files "./resources/**")
+  foreach(file ${files})
+    file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} "${file}")
+    set_property(TARGET smk-starter APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
+    MESSAGE(STATUS " --preload-file \"${file}@/${relative_file}\"")
+  endforeach()
 endif()
 
 install(TARGETS smk-starter RUNTIME DESTINATION "bin")

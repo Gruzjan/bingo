@@ -1,3 +1,4 @@
+#pragma once
 #include <functional>
 
 #include <smk/Color.hpp>
@@ -24,4 +25,5 @@ public:
     bool hover();
     void onClick(std::function<void()>);
     void onHover(std::function<void()>);
+    void draw();
 };

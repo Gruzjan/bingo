@@ -3,7 +3,7 @@
 #include <smk/Window.hpp>
 #include <smk/Input.hpp>
 
-#include "headers/button.hpp"
+#include "headers/Button.hpp"
 
 Button::Button(int x, int y, int width, int height, smk::Window &window) {
     this->x = x;
@@ -79,4 +79,8 @@ void Button::onHover(const std::function<void()> f) {
     && (cursor.y >= this->y && cursor.y <= this->y + this->height)) {
         f();
     }
+}
+
+void Button::draw() {
+    window->Draw(button);
 }
