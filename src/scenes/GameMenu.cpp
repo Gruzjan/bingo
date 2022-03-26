@@ -64,7 +64,7 @@ void GameMenu::draw() {
   });
 
   createBtn.onClick([&] {
-    return "CreateGameScene";
+    SceneManager::updateName("CreateGameScene");
   });
 
   auto text = smk::Text(font, "The lysy bingo game");
