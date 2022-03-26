@@ -12,19 +12,6 @@
 #include "headers/Button.hpp"
 #include "headers/SceneManager.hpp"
 
-/*
-void JoinGame(smk::Window &window) {
-  Button textbox(250, 250, 110, 40, window);
-  Button joinBtn(250, 350, 110, 40, window);
-
-  window.PoolEvents();
-  window.Clear(smk::Color::Black);
-
-  joinBtn.draw();
-  textbox.draw();
-}
-*/
-
 JoinGame::JoinGame(smk::Window &window) : window(window) {}
 
 void JoinGame::draw() {

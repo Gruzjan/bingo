@@ -14,10 +14,6 @@ SceneManager::SceneManager(smk::Window &window) : window(window) {
     currentScene = menu;
 }
 
-void SceneManager::setCurrentScene(int index) {
-    currentScene = scenes[index];
-}
-
 void SceneManager::drawScene() {
     currentScene->draw();
 }
