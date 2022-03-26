@@ -14,8 +14,8 @@ private:
     smk::Window &window;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
 public:
-    GameMenu(smk::Window&);
-    ~GameMenu(){}
+    CreateGame(smk::Window&);
+    ~CreateGame(){}
     void draw();
     void restart();
     std::string getName();

@@ -4,6 +4,7 @@
 
 #include "scenes/GameMenu.cpp"
 #include "scenes/JoinGame.cpp"
+#include "scenes/CreateGame.cpp"
 #include "utils/SceneManager.cpp"
 
 std::string SceneManager::sceneName = "";
