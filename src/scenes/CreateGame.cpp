@@ -15,9 +15,16 @@
 CreateGame::CreateGame(smk::Window &window) : window(window) {}
 
 void CreateGame::draw() {
+  auto siema = smk::Shape::Square();
+  siema.SetScaleX(350);
+  siema.SetScaleY(900);
+  siema.SetPosition(40, 60);
+  siema.SetColor(smk::Color::Blue);
+
   Button textbox(250, 250, 110, 40, window);
   Button createBtn(250, 350, 110, 40, window);
   Button backBtn(0, 0, 80, 40, window);
+
 
   createBtn.onClick([&] {
     SceneManager::updateName("menu");
@@ -27,6 +34,7 @@ void CreateGame::draw() {
     SceneManager::updateName("GameMenuScene");
   });
 
+  window.Draw(siema);
   createBtn.draw();
   textbox.draw();
   backBtn.draw();

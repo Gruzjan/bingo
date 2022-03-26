@@ -10,7 +10,7 @@
 std::string SceneManager::sceneName = "";
 
 int main() {
-  auto window = smk::Window(640, 480, "scena1");
+  auto window = smk::Window(1920, 1080, "scena1");
   SceneManager manager(window);
 
   window.ExecuteMainLoop([&] {

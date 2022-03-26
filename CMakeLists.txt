@@ -35,6 +35,12 @@ if(EMSCRIPTEN)
     set_property(TARGET smk-starter APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
     MESSAGE(STATUS " --preload-file \"${file}@/${relative_file}\"")
   endforeach()
+
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/style.css
+    ${CMAKE_CURRENT_BINARY_DIR}/style.css
+  )
+
 endif()
 
 install(TARGETS smk-starter RUNTIME DESTINATION "bin")
