@@ -31,6 +31,12 @@ python -m SimpleHTTPServer
 ## Linux snap build:
 Nothing to do. Upload your game to github and visit https://snapcraft.io/build.
 
+## Backend build:
+~~~
+yarn install
+(in root dir) yarn backend
+~~~
+
 # Want more complexe examples?
 
 Look at real projects:
