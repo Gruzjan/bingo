@@ -6,6 +6,9 @@
 #include "scenes/JoinGame.cpp"
 #include "scenes/CreateGame.cpp"
 #include "utils/SceneManager.cpp"
+#include "utils/UIElement.cpp"
+#include "utils/Button.cpp"
+#include "utils/InputBox.cpp"
 
 std::string SceneManager::sceneName = "";
 

@@ -12,7 +12,7 @@
 #include <smk/Text.hpp>
 
 #include "headers/GameMenu.hpp"
-#include "utils/Button.cpp"
+#include "headers/Button.hpp"
 #include "headers/SceneManager.hpp"
 
 /*
