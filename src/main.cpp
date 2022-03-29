@@ -15,7 +15,7 @@ std::string SceneManager::sceneName = "";
 int main() {
   auto window = smk::Window(1920, 1080, "scena1");
   SceneManager manager(window);
-
+  
   window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);

@@ -7,12 +7,15 @@
 #include <smk/Font.hpp>
 
 #include "headers/Scene.hpp"
+#include "headers/InputBox.hpp"
 
 class CreateGame : public Scene {
 private:
     std::string name = "CreateGameScene";
     smk::Window &window;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
+    InputBox *inputBox;
+
 public:
     CreateGame(smk::Window&);
     ~CreateGame(){}
