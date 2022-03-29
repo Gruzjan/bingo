@@ -2,26 +2,26 @@ cmake_minimum_required (VERSION 3.11)
 
 add_subdirectory(third_party)
 
-project(lyly-bingo
+project(lysy-bingo
   LANGUAGES CXX
   VERSION 1.0.0
 )
 
-add_executable(lyly-bingo
+add_executable(lysy-bingo
   src/main.cpp
 )
 
-target_include_directories(lyly-bingo PRIVATE src)
-target_link_libraries(lyly-bingo PRIVATE smk)
+target_include_directories(lysy-bingo PRIVATE src)
+target_link_libraries(lysy-bingo PRIVATE smk)
 
-set_target_properties(lyly-bingo PROPERTIES CXX_STANDARD 11)
+set_target_properties(lysy-bingo PROPERTIES CXX_STANDARD 11)
 
-target_compile_options(lyly-bingo PRIVATE -Wall -Wextra -pedantic -Werror)
+target_compile_options(lysy-bingo PRIVATE -Wall -Wextra -pedantic -Werror)
 
 # Detect emscripten is used.
 if(EMSCRIPTEN)
 
-  set_property(TARGET lyly-bingo APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1")
+  set_property(TARGET lysy-bingo APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1")
 
   # Copy the index.html file.
   configure_file(
@@ -32,7 +32,7 @@ if(EMSCRIPTEN)
   file(GLOB_RECURSE files "./resources/**")
   foreach(file ${files})
     file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} "${file}")
-    set_property(TARGET lyly-bingo APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
+    set_property(TARGET lysy-bingo APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
     MESSAGE(STATUS " --preload-file \"${file}@/${relative_file}\"")
   endforeach()
 
@@ -43,4 +43,4 @@ if(EMSCRIPTEN)
 
 endif()
 
-install(TARGETS lyly-bingo RUNTIME DESTINATION "bin")
+install(TARGETS lysy-bingo RUNTIME DESTINATION "bin")
