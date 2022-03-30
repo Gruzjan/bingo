@@ -49,6 +49,7 @@ void CreateGame::draw() {
         passwords.push_back(inputBox->getText());
 
         for (auto x : passwords) {
+            // Convert wstring to string
             std::string temp(x.begin(), x.end());
             std::cerr << "Password: " << temp << std::endl;
         }
