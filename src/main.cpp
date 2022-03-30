@@ -1,6 +1,7 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
+#include <smk/Input.hpp>
 
 #include "scenes/GameMenu.cpp"
 #include "scenes/JoinGame.cpp"

@@ -1,4 +1,5 @@
 #include "headers/InputBox.hpp"
+#include "smk/Text.hpp"
 
 
 InputBox::InputBox(int x, int y, int width, int height, smk::Window &window){
@@ -19,6 +20,8 @@ InputBox::InputBox(int x, int y, int width, int height, smk::Window &window){
     UIElement.SetScaleY(height);
     UIElement.SetPosition(x, y);
     UIElement.SetColor(smk::Color::Cyan); 
+
+    listener = window.input().MakeCharacterListener();
 }
 
 void InputBox::onClick(){
@@ -37,40 +40,68 @@ void InputBox::onClick(){
     }
 }
 
-void InputBox::write(wchar_t character) {
-    if(focused){
-        if(input.empty())
-            input = character;
-        else
-            input += character;
-    
-        text = smk::Text(font, L"Input = " + input);
-        window->Draw(text);
+void InputBox::writeListener(std::function<void(void)> f) {
+    // Just focused
+    if (focused) {
+        // In case you would like to intercept a key
+        f();
+
+        // Would love to use switch here but listener doesn't 
+        // listen for modifier keys e.g. `enter`, `alt` etc.
+
+        // Backspace handler
+        if (
+            (window->input().IsKeyPressed(GLFW_KEY_BACKSPACE))
+            && input.size() > 0
+        ) {
+            input = input.substr(0, input.size() - 1);
+            this->setText(input);
+            std::cerr << "deleter" << std::endl;
+        }
+
+        // Enter handler
+        else if 
+        (
+            (window->input().IsKeyPressed(GLFW_KEY_ENTER))
+            && input.size() > 0
+        ) {
+            input = L"";
+            this->setText(input);
+            std::cerr << "enterer" << std::endl;
+        }
+
+        // Default
         UIElement.SetColor(smk::Color::Yellow);
     }
 
-    // auto listener = window->input().MakeCharacterListener();
-    // wchar_t character = 'a';
-    // while(listener->Receive(&character) && focused) {
-    //     UIElement.SetColor(smk::Color::Yellow);
-    //     if(input.empty())
-    //         input = character;
-    //     else
-    //         input += character;
-    // }
-    // if(window->input().IsKeyReleased(GLFW_KEY_BACKSPACE) && !input.empty() && focused)
-    //     input.erase(input.size() - 1);
-
+    // Focused and key pressed
+    // Cant be inside above `if` statement because
+    // it will register all keys pressed before being focused
+    while(listener->Receive(&character) && focused) {
+        this->appendText(character);
+        std::cerr << "keyer" << std::endl;
+    }
 }
 
 void InputBox::draw() {
     window->Draw(UIElement);
+    window->Draw(text);
 }
 
 smk::Transformable &InputBox::getInputBox(){
     return UIElement;
 }
 
-smk::Text &InputBox::getText(){
-    return text;
+std::wstring InputBox::getText(){
+    return input;
+}
+
+void InputBox::appendText(wchar_t text) {
+    input += text;
+    this->text.SetString(L"Input: " + input);
+}
+
+void InputBox::setText(std::wstring text) {
+    input = text;
+    this->text.SetString(L"Input: " + input);
 }

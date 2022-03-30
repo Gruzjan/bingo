@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
@@ -7,6 +8,7 @@
 #include <smk/Rectangle.hpp>
 #include <smk/Vertex.hpp>
 #include <smk/VertexArray.hpp>
+#include <smk/Text.hpp>
 
 #include "headers/CreateGame.hpp"
 #include "headers/Button.hpp"
@@ -16,7 +18,7 @@
 CreateGame::CreateGame(smk::Window &window) : window(window) {
 
   this->inputBox = new InputBox(60, 150, 350, 780, window);
-  this->inputBox->getText().SetPosition(100, 100);
+  listener = window.input().MakeCharacterListener();
 
 }
 
@@ -37,23 +39,21 @@ void CreateGame::draw() {
   inputTitle.SetPosition(350 / 2 - 20, 95);
   inputTitle.SetColor(smk::Color::White);
 
-  std::wstring input;
-
-  auto listener = window.input().MakeCharacterListener();
-  wchar_t character = 'a';
-  while(listener->Receive(&character)) {
-    input += character;
-    auto inputText = smk::Text(font, L"Input: " + input);
-    
-    window.Draw(inputText);
-    //inputBox->write(character);
-  }
-
-  auto inputText = smk::Text(font, L"Input: " + input);
-  window.Draw(inputText);
 
   Button createBtn(250, 350, 110, 40, window);
   inputBox->onClick();
+
+  inputBox->writeListener([&] {
+  if (window.input().IsKeyPressed(GLFW_KEY_ENTER) 
+      && inputBox->getText().size() > 0) {
+        passwords.push_back(inputBox->getText());
+
+        for (auto x : passwords) {
+            std::string temp(x.begin(), x.end());
+            std::cerr << "Password: " << temp << std::endl;
+        }
+    }
+  });
 
   backBtn.onClick([&] {
     SceneManager::updateName("GameMenuScene");
