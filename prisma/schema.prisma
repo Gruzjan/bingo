@@ -8,22 +8,23 @@ datasource db {
 }
 
 model Games {
-  id          Int          @id @default(autoincrement())
-  isRuuning   Boolean
-  gameCode    String
+  id          Int             @id @default(autoincrement())
+  isRunning   Boolean
+  gameCode    String          @unique
   savedBoards SavedBoards?
+  words       String
 }
 
 model WordLists {
-  id    Int    @id @default(autoincrement())
-  name  String
-  words String
+  id          Int               @id @default(autoincrement())
+  name        String
+  words       String
 }
 
 model SavedBoards {
-  id     Int    @id @default(autoincrement())
-  gameId Int    @unique
-  name   String
-  board  String
-  Games  Games  @relation(fields: [gameId], references: [id])
+  id          Int              @id @default(autoincrement())
+  gameId      Int              @unique
+  name        String
+  board       String
+  Games       Games            @relation(fields: [gameId], references: [id])
 }
