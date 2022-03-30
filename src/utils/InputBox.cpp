@@ -98,10 +98,16 @@ std::wstring InputBox::getText(){
 
 void InputBox::appendText(wchar_t text) {
     input += text;
-    this->text.SetString(L"Input: " + input);
+    if (input.size() > 12)
+        this->text.SetString(L"Input: " + input.substr(input.size() - 12, input.size()));
+    else
+        this->text.SetString(L"Input: " + input);
 }
 
 void InputBox::setText(std::wstring text) {
     input = text;
-    this->text.SetString(L"Input: " + input);
+    if (input.size() > 12)
+        this->text.SetString(L"Input: " + input.substr(input.size() - 12, input.size()));
+    else
+        this->text.SetString(L"Input: " + input);
 }
