@@ -1,6 +1,7 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
+#include <smk/Input.hpp>
 
 #include "scenes/GameMenu.cpp"
 #include "scenes/JoinGame.cpp"
@@ -9,6 +10,8 @@
 #include "utils/UIElement.cpp"
 #include "utils/Button.cpp"
 #include "utils/InputBox.cpp"
+#include "utils/Tile.cpp"
+#include "utils/Board.cpp"
 
 std::string SceneManager::sceneName = "";
 

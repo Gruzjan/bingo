@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <functional>
+#include <vector>
 
 #include "smk/Window.hpp"
 #include "smk/Color.hpp"
@@ -14,12 +15,18 @@ private:
     std::wstring input;
     bool focused = false;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
-    smk::Text text = smk::Text(font, L"Input: ");
+    smk::Text inputText = smk::Text(font, L"");
+    smk::Input::CharacterListener listener;
+    wchar_t character;
+    std::vector<std::wstring> passwords;
 public:
     InputBox(int, int, int, int, smk::Window&);
     void onClick();
-    void write(wchar_t);
+    void writeListener(std::function<void()>);
     void draw();
     smk::Transformable &getInputBox();
-    smk::Text &getText();
+    std::wstring getInputText();
+    void setInputText(std::wstring);
+    void appendInputText(wchar_t);
+    void pushBackPassword(std::wstring);
 };

@@ -8,6 +8,7 @@
 
 #include "headers/Scene.hpp"
 #include "headers/InputBox.hpp"
+#include "headers/Board.hpp"
 
 class CreateGame : public Scene {
 private:
@@ -15,7 +16,8 @@ private:
     smk::Window &window;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
     InputBox *inputBox;
-
+    smk::Input::CharacterListener listener;
+    Board *board;
 public:
     CreateGame(smk::Window&);
     ~CreateGame(){}
