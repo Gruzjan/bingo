@@ -1,8 +1,18 @@
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
+#include <nlohmann/json.hpp>
+#include <iostream>
+#include "utils/HTTPClient.cpp"
+
+nlohmann::json HTTPClient::HTTPResponseData = {};
 
 int main() {
+  nlohmann::json j = {
+      {"words", "[\"test\", \"aaaa\"]"}
+  };
+  HTTPClient h("http://localhost:3000");
+  h.fetch("POST", "/create", j);
   // Open a new window.
   auto window = smk::Window(640, 480, "test");
 
