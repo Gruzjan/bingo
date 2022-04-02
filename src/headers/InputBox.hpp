@@ -29,4 +29,7 @@ public:
     void setInputText(std::wstring);
     void appendInputText(wchar_t);
     void pushBackPassword(std::wstring);
+    void setPasswords(std::vector<std::wstring>);
+    std::vector<std::wstring> getPasswords();
+    void clearPasswords();
 };

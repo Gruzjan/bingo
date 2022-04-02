@@ -22,7 +22,7 @@ int main() {
   window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
-
+    
     manager.updateScene();
     manager.drawScene();
     window.Display();
