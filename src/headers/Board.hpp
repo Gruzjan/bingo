@@ -17,6 +17,7 @@ private:
     std::vector<Tile*> tiles;
     std::vector<Tile*> previewTiles;
     bool freeTile = false;
+    std::vector<std::wstring> winningWords;
 public:
     Board(int, int, int, int, smk::Window&);
     void draw(bool);
@@ -29,4 +30,5 @@ public:
     std::vector<Tile*> getTiles();
     smk::Transformable &getBoard();
     void setTilesOnClickAction();
+    std::vector<std::wstring> getWinningWords();
 };

@@ -31,7 +31,40 @@ void Board::draw(bool preview){
 }
 
 bool Board::isBingo(){
-    return true;
+    int selected = 0;
+    // Check for rows
+    for (int i = 0; i < (int)tiles.size(); i++) {
+        if (i % size == 0) {
+            selected = 0;
+            winningWords.clear();
+        }
+        if (tiles[i]->isChecked()) {
+            selected++;
+            winningWords.push_back(tiles[i]->getPassword());
+        }
+        if (selected == size) return true;
+    }
+
+    // Check for columns
+    selected = 0;
+    int a = 0;
+    int b = -1;
+    for(int i = 0; i < (int)tiles.size(); i++) {
+        if (a % size == 0) {
+            a = 0;
+            b++;
+            selected = 0;
+            winningWords.clear();
+        }
+        if (tiles[(a * size) + b]->isChecked()) {
+            selected++;
+            winningWords.push_back(tiles[(a * size) + b]->getPassword());
+        }
+        if (selected == size) return true;
+        a++;
+    }
+
+    return false;
 }
 
 int Board::getSize(){
@@ -99,4 +132,8 @@ void Board::setTilesOnClickAction(){
     for(auto x : tiles)
         x->onClick([&]{x->switchCheck(); std::cerr << "tile on click" << std::endl;});
     
+}
+
+std::vector<std::wstring> Board::getWinningWords() {
+    return this->winningWords;
 }
