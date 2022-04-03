@@ -7,16 +7,20 @@
 #include "headers/GameView.hpp"
 #include "headers/JoinGame.hpp"
 #include "headers/CreateGame.hpp"
+#include "headers/GameMaster.hpp"
 
 SceneManager::SceneManager(smk::Window &window) : window(window) {
     Scene *menu = new GameMenu(window);
     Scene *join = new JoinGame(window);
     Scene *create = new CreateGame(window);
     Scene *game = new GameView(window);
+    Scene *master = new GameMaster(window);
     loadScene(menu);
     loadScene(join);
     loadScene(create);
     loadScene(game);
+    loadScene(master);
+
     currentScene = menu;
 }
 
