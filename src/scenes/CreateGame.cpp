@@ -29,7 +29,6 @@ CreateGame::CreateGame(smk::Window &window) : window(window) {
 
 void CreateGame::draw() {
   inputBox->onClick();
-  board->setTilesOnClickAction();
 
   //====== SCENE TITLE ======
   smk::Text sceneTitle = smk::Text(font, "Game creator");

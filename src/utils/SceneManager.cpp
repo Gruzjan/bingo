@@ -4,6 +4,7 @@
 
 #include "headers/SceneManager.hpp"
 #include "headers/GameMenu.hpp"
+#include "headers/GameView.hpp"
 #include "headers/JoinGame.hpp"
 #include "headers/CreateGame.hpp"
 
@@ -11,9 +12,11 @@ SceneManager::SceneManager(smk::Window &window) : window(window) {
     Scene *menu = new GameMenu(window);
     Scene *join = new JoinGame(window);
     Scene *create = new CreateGame(window);
+    Scene *game = new GameView(window);
     loadScene(menu);
     loadScene(join);
     loadScene(create);
+    loadScene(game);
     currentScene = menu;
 }
 

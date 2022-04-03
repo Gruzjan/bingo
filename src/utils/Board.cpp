@@ -21,7 +21,7 @@ Board::Board(int x, int y, int width, int height, smk::Window &window) {
 }
 
 void Board::draw(bool preview){
-    window->Draw(UIElement);
+    //window->Draw(UIElement);
     for(unsigned long i = 0; i < tiles.size(); i++){
         if(!preview)
             tiles.at(i).draw();
@@ -47,7 +47,7 @@ void Board::setSize(int size){
     for(int i = 0; i < size; i++)
         for(int j = 0; j < size; j++){
             previewTiles.emplace_back(Tile(tX + j * 5 + j * tileSize, tY + i * 5 + i * tileSize, tileSize, tileSize, *window));
-            tiles.emplace_back(Tile(tX + j * 5 + j * tileSize + 50, tY + i * 5 + i * tileSize + 50, tileSize + 50, tileSize + 50, *window));
+            tiles.emplace_back(Tile(tX + j * 5 + j * (tileSize + 50), tY + i * 5 + i * (tileSize + 50), (tileSize + 50), (tileSize + 50), *window));
         }
 }
 
@@ -84,7 +84,7 @@ smk::Transformable &Board::getBoard() {
 }
 
 void Board::setTilesOnClickAction(){
-    for(auto x : previewTiles){
-        x.onClick([&]{x.setCheck(true); UIElement.SetColor(smk::Color::Grey);});
-    }
+    for(auto x : tiles)
+        x.onClick([&]{x.switchCheck(); std::cerr << "tile on click" << std::endl;});
+    
 }
