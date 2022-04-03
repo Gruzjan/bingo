@@ -22,7 +22,7 @@ private:
     smk::Input::CharacterListener listener;
     Board *board;
     std::map<std::string, std::vector<std::wstring>> presets {
-            {"lysy", {L"Energol", L"\"Przerwa jest\"", L"\"To jest proste\"",
+                                                            {"lysy", {L"Energol", L"\"Przerwa jest\"", L"\"To jest proste\"",
                                                             L"\"Mikisheesh\"", L"\"Wlochaty\"", L"\"Panie technik\"",
                                                             L"Praca w grupach", L"Uwaga za mundur", L"Pompki",
                                                             L"\"Lendzionek\"", L"\"Czego?\"", L"\"Co tam brzeczysz?\"",

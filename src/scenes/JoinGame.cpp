@@ -24,7 +24,7 @@ void JoinGame::draw() {
   Button backBtn(0, 0, 180, 100, window);
 
   joinBtn.onClick([&] {
-    SceneManager::updateName("menu");
+    SceneManager::updateName("GameViewScene");
   });
 
   backBtn.onClick([&] {

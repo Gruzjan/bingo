@@ -17,17 +17,54 @@ Board::Board(int x, int y, int width, int height, smk::Window &window) {
     UIElement.SetScaleX(width);
     UIElement.SetScaleY(height);
     UIElement.SetPosition(x, y);
-    UIElement.SetColor(smk::Color::Blue);
+    UIElement.SetColor(smk::Color::Cyan);
 }
 
 void Board::draw(bool preview){
     window->Draw(UIElement);
     for(unsigned long i = 0; i < tiles.size(); i++){
         if(!preview)
-            tiles.at(i).draw();
+            tiles.at(i)->draw();
         else
-            previewTiles.at(i).draw();
+            previewTiles.at(i)->draw();
     }
+}
+
+bool Board::isBingo(){
+    int selected = 0;
+    // Check for rows
+    for (int i = 0; i < (int)tiles.size(); i++) {
+        if (i % size == 0) {
+            selected = 0;
+            winningWords.clear();
+        }
+        if (tiles[i]->isChecked()) {
+            selected++;
+            winningWords.push_back(tiles[i]->getPassword());
+        }
+        if (selected == size) return true;
+    }
+
+    // Check for columns
+    selected = 0;
+    int a = 0;
+    int b = -1;
+    for(int i = 0; i < (int)tiles.size(); i++) {
+        if (a % size == 0) {
+            a = 0;
+            b++;
+            selected = 0;
+            winningWords.clear();
+        }
+        if (tiles[(a * size) + b]->isChecked()) {
+            selected++;
+            winningWords.push_back(tiles[(a * size) + b]->getPassword());
+        }
+        if (selected == size) return true;
+        a++;
+    }
+
+    return false;
 }
 
 int Board::getSize(){
@@ -46,8 +83,8 @@ void Board::setSize(int size){
 
     for(int i = 0; i < size; i++)
         for(int j = 0; j < size; j++){
-            previewTiles.emplace_back(Tile(tX + j * 5 + j * tileSize, tY + i * 5 + i * tileSize, tileSize, tileSize, *window));
-            tiles.emplace_back(Tile(tX + j * 5 + j * tileSize + 50, tY + i * 5 + i * tileSize + 50, tileSize + 50, tileSize + 50, *window));
+            previewTiles.emplace_back(new Tile(tX + j * 5 + j * tileSize, tY + i * 5 + i * tileSize, tileSize, tileSize, *window));
+            tiles.emplace_back(new Tile(tX + j * 5 + j * (tileSize + 50), tY + i * 5 + i * (tileSize + 50), (tileSize + 50), (tileSize + 50), *window));
         }
 }
 
@@ -58,25 +95,33 @@ void Board::setPasswords(std::vector<std::wstring> passwords){
 
     for(int i = 0; i < limit; i++){
         int index = rand() % passwords.size();
-        previewTiles.at(i).setPassword(passwords.at(index));
+        tiles.at(i)->setPassword(passwords.at(index));
+        previewTiles.at(i)->setPassword(passwords.at(index));
         passwords.erase(passwords.begin() + index);
+    }
+
+    if(freeTile && size == 5){
+        tiles.at(24)->setPassword(tiles.at(12)->getPassword());
+        tiles.at(12)->setPassword(L"Free!");
+
     }
 }
 
 void Board::setFreeTile(bool free){
     freeTile = free;
-    if(free && getSize() == 5){
-        previewTiles.at(12).setCheck(true);
-        previewTiles.at(12).UIElement.SetColor(smk::Color::Green); // Free color
-    }
-    else if(!free){
-        previewTiles.at(12).setCheck(false);
-        previewTiles.at(12).UIElement.SetColor(smk::Color::White); // Default color
-    }
+    previewTiles.at(12)->setCheck(free);
+    if(free && getSize() == 5)
+        previewTiles.at(12)->UIElement.SetColor(smk::Color::Green); // Free color
+    else if(!free)
+        previewTiles.at(12)->UIElement.SetColor(smk::Color::White); // Default color
 }
 
 bool Board::getFreeTile(){
     return freeTile;
+}
+
+std::vector<Tile*> Board::getTiles(){
+    return tiles;
 }
 
 smk::Transformable &Board::getBoard() {
@@ -84,7 +129,11 @@ smk::Transformable &Board::getBoard() {
 }
 
 void Board::setTilesOnClickAction(){
-    for(auto x : previewTiles){
-        x.onClick([&]{x.setCheck(true); UIElement.SetColor(smk::Color::Grey);});
-    }
+    for(auto x : tiles)
+        x->onClick([&]{x->switchCheck(); std::cerr << "tile on click" << std::endl;});
+    
+}
+
+std::vector<std::wstring> Board::getWinningWords() {
+    return this->winningWords;
 }

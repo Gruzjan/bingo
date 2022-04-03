@@ -5,6 +5,7 @@
 #include <smk/Sprite.hpp>
 
 #include "scenes/GameMenu.cpp"
+#include "scenes/GameView.cpp"
 #include "scenes/JoinGame.cpp"
 #include "scenes/CreateGame.cpp"
 #include "scenes/GameMaster.cpp"

@@ -18,12 +18,9 @@ Tile::Tile(int x, int y, int width, int height, smk::Window &window) {
     UIElement.SetScaleY(height);
     UIElement.SetPosition(x, y);
     UIElement.SetColor(smk::Color::White);
-
 }
 
 void Tile::draw(){
-    if(checked)
-        UIElement.SetColor(smk::Color::Green);
     window->Draw(UIElement);
 }
 
@@ -35,18 +32,32 @@ std::wstring Tile::getPassword(){
     return password;
 }
 
-void Tile::setCheck(bool check){ //TODO: WTF
-    std::cerr << "setCheck " << check << std::endl; 
+void Tile::setCheck(bool check){
+    std::cerr << "setting check to: " << check << std::endl; 
     checked = check;
     
     if(checked){
         UIElement.SetColor(smk::Color::Yellow);
-        std::cerr << "siema kurwy" << std::endl; 
+        std::cerr << "tile is checked, color should be yellow (set)" << std::endl; 
     }
 }
 
 void Tile::switchCheck(){
     checked = !checked;
+    std::cerr << "set check to: " << checked << std::endl; 
+    UIElement.SetColor(smk::Color::White);
+    if(checked){
+        UIElement.SetColor(smk::Color::Yellow);
+        std::cerr << "tile is checked, color should be yellow (switch)" << std::endl; 
+    }
+}
+
+void Tile::setText(smk::Text *text){
+    this->text = text;
+}
+
+smk::Text &Tile::getText(){
+    return *text;
 }
 
 bool Tile::isChecked(){
