@@ -2,22 +2,23 @@ cmake_minimum_required (VERSION 3.11)
 
 add_subdirectory(third_party)
 
-project(smk-starter
+project(lysy-bingo
   LANGUAGES CXX
   VERSION 1.0.0
 )
 
-add_executable(smk-starter
+add_executable(lysy-bingo
   src/main.cpp
 )
 
-target_include_directories(smk-starter PRIVATE src)
-target_link_libraries(smk-starter PRIVATE smk)
-target_link_libraries(smk-starter PRIVATE nlohmann_json::nlohmann_json)
+target_include_directories(lysy-bingo PRIVATE src)
+target_link_libraries(lysy-bingo PRIVATE smk)
+target_link_libraries(lysy-bingo PRIVATE nlohmann_json::nlohmann_json)
 
-set_target_properties(smk-starter PROPERTIES CXX_STANDARD 11 COMPILE_FLAGS "-s USE_BOOST_HEADERS=1" LINK_FLAGS "-s USE_BOOST_HEADERS=1")
+set_target_properties(lysy-bingo PROPERTIES CXX_STANDARD 11 COMPILE_FLAGS "-s USE_BOOST_HEADERS=1" LINK_FLAGS "-s USE_BOOST_HEADERS=1")
 
-target_compile_options(smk-starter PRIVATE -Wall -Wextra -pedantic -Werror)
+
+target_compile_options(lysy-bingo PRIVATE -Wall -Wextra -pedantic -Werror)
 
 # Detect emscripten is used.
 if(EMSCRIPTEN)
@@ -30,6 +31,18 @@ if(EMSCRIPTEN)
     ${CMAKE_CURRENT_BINARY_DIR}/index.html
     COPYONLY
   )
+  file(GLOB_RECURSE files "./resources/**")
+  foreach(file ${files})
+    file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} "${file}")
+    set_property(TARGET lysy-bingo APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
+    MESSAGE(STATUS " --preload-file \"${file}@/${relative_file}\"")
+  endforeach()
+
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/style.css
+    ${CMAKE_CURRENT_BINARY_DIR}/style.css
+  )
+
 endif()
 
-install(TARGETS smk-starter RUNTIME DESTINATION "bin")
+install(TARGETS lysy-bingo RUNTIME DESTINATION "bin")
