@@ -3,6 +3,7 @@
 #include <smk/Window.hpp>
 #include <smk/Input.hpp>
 #include <smk/Sprite.hpp>
+#include <smk/Audio.hpp>
 
 #include "scenes/GameMenu.cpp"
 #include "scenes/JoinGame.cpp"
@@ -16,6 +17,8 @@
 #include "utils/Board.cpp"
 #include <iostream>
 #include "utils/HTTPClient.cpp"
+#include <locale>
+#include <codecvt>
 
 nlohmann::json HTTPClient::HTTPResponseData = {};
 
@@ -24,6 +27,7 @@ std::string SceneManager::sceneName = "";
 int main() {
   auto window = smk::Window(1920, 1080, "scena1");
   SceneManager manager(window);
+  smk::Audio audio;
 
   auto texture = smk::Texture("/resources/background-pixel.png");
   auto background = smk::Shape::Square();
@@ -37,6 +41,7 @@ int main() {
 
     window.Draw(background);
     manager.updateScene();
+    manager.dataPipeline();
     manager.drawScene();
     window.Display();
   });

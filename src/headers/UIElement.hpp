@@ -4,8 +4,10 @@
 #include <smk/Window.hpp>
 #include <smk/Input.hpp>
 #include <smk/Color.hpp>
-#include "smk/Transformable.hpp"
-
+#include <smk/Transformable.hpp>
+#include <smk/Audio.hpp>
+#include <smk/Sound.hpp>
+#include <smk/SoundBuffer.hpp>
 class UIElement {
 public:
     int x, y, width, height;

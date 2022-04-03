@@ -10,6 +10,7 @@
 #include "headers/GameMaster.hpp"
 #include "headers/Button.hpp"
 #include "headers/SceneManager.hpp"
+#include "headers/HTTPClient.hpp"
 
 #include <iostream>
 #include <map>
@@ -22,27 +23,6 @@ GameMaster::GameMaster(smk::Window &window) : window(window) {
   this->inputBox = new InputBox(500, 150, 800, 50, window, 48);
   inputBox->setColor(smk::Color::RGB(0.6, 0.4, 0.6));
   page = 0;
-  passwords = 
-  { {"Krzesla", 0}
-  , {"Dzieci", 0}
-  , {"Slychac klucze", 0}
-  , {"Panie technik", 0}
-  , {"Zapowiedzial kartkowke", 0}
-  , {"Film", 0}
-  , {"Nie psuj mi...", 0}
-  , {"Mazak nie dziala", 0}
-  , {"Gracjanek", 0}
-  , {"Wlochaty", 0}
-  , {"Miki", 0}
-  , {"Puszcza muzyke w tle", 0}
-  , {"Problem z pendrivem", 0}
-  , {"Bawi sie w wychowawce", 0}
-  , {"Grzybowski incydent", 0}
-  , {"Grzybowski incydent v2", 0}
-  };
-  for (const auto &key : passwords) {
-      wordKeys.push_back(key.first);
-  }
 }
 
 std::vector<std::string> pagination(
@@ -99,6 +79,13 @@ void GameMaster::draw() {
 
         word.onClick([&] {
             it->second = !it->second;
+            nlohmann::json data = {
+                {"gameCode", gameCode},
+                {"word", key}
+            };
+            std::cerr << data.dump() << std::endl;
+            HTTPClient h("http://localhost:3000");
+            h.fetch("POST", "/changecorrect", data);
         });
 
         smk::Text caption = smk::Text(font, key);
@@ -147,7 +134,7 @@ void GameMaster::draw() {
     pageNumber.SetPosition(950, 1000);
     window.Draw(pageNumber);
 
-    //====== NAVIGATION ======
+    //====== BACK TO MENU ======
     Button menuBtn(0, 0, 100, 70, window);
     menuBtn.setColor(smk::Color::Cyan);
     menuBtn.onClick([&] {
@@ -178,8 +165,8 @@ void GameMaster::draw() {
     clearBtn.draw();
     window.Draw(clearText);
 
-    //====== CLEAR ======
-    smk::Text codeText = smk::Text(font, "ABCDEF");
+    //====== CODE ======
+    smk::Text codeText = smk::Text(font, gameCode);
     codeText.SetColor(smk::Color::Yellow);
     codeText.SetPosition(120, 10);
     window.Draw(codeText);
@@ -200,4 +187,22 @@ void GameMaster::restart() {};
 
 std::string GameMaster::getName() {
     return this->name;
+}
+
+void GameMaster::transferData(nlohmann::json j) {
+    std::cerr << j["gameCode"] << std::endl;
+    std::cerr << j["passwords"] << std::endl;
+
+    // Convert data from pipeline to string
+    for (std::wstring x : j["passwords"]) {
+        std::string tempStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(x);
+        passwords[tempStr] = 0;
+        wordKeys.push_back(tempStr);
+    }
+    gameCode = j["gameCode"];
+    isTransfered = true;
+}
+
+bool GameMaster::checkTransfer() {
+    return isTransfered;
 }

@@ -33,6 +33,7 @@ private:
                                                             L"Muzyka w tle", L"*Slychac klucze*", L"Godzina wychowawcza",
                                                             L"Problem z pendrivem", L"Absurdalna uwaga", L"Absurdalna pochwala"}}
         };
+    std::vector<std::wstring> passwords;
 public:
     CreateGame(smk::Window&);
     ~CreateGame(){}
@@ -40,4 +41,7 @@ public:
     void restart();
     std::string generateCode();
     std::string getName();
+    void setPasswords(std::vector<std::wstring>);
+    std::vector<std::wstring> getPasswords();
+    std::string getGameCode();
 };

@@ -25,4 +25,5 @@ public:
     void loadScene(Scene*);
     void updateScene();
     static void updateName(std::string);
+    void dataPipeline();
 };
