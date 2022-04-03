@@ -17,7 +17,7 @@
 #include "headers/Tile.hpp"
 
 CreateGame::CreateGame(smk::Window &window) : window(window) {
-  this->inputBox = new InputBox(60, 150, 350, 820, window);
+  this->inputBox = new InputBox(60, 150, 350, 820, window, 48);
   listener = window.input().MakeCharacterListener();
   board = new Board(1250, 150, 0, 0, window);
 }

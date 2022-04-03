@@ -13,15 +13,15 @@
 
 class InputBox : virtual public UIElement{
 private:
-    std::wstring input;
+    std::wstring input = L"";
     bool focused = false;
-    smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
+    smk::Font font;
     smk::Text inputText;
     smk::Input::CharacterListener listener;
     wchar_t character;
     std::vector<std::wstring> passwords;
 public:
-    InputBox(int, int, int, int, smk::Window&);
+    InputBox(int, int, int, int, smk::Window&, int);
     void onClick();
     void writeListener(std::function<void()>);
     void draw();

@@ -16,12 +16,12 @@
 
 JoinGame::JoinGame(smk::Window &window) 
   : window(window), 
-  username(InputBox(700, 500, 300, 100, window)),
-  gamecode(InputBox(700, 700, 300, 100, window)) {}
+  username(InputBox(750, 400, 450, 100, window, 72)),
+  gamecode(InputBox(750, 600, 450, 100, window, 72)) {}
 
 void JoinGame::draw() {
-  Button joinBtn(700, 850, 300, 100, window);
-  Button backBtn(0, 0, 100, 70, window);
+  Button joinBtn(750, 750, 450, 125, window);
+  Button backBtn(0, 0, 180, 100, window);
 
   joinBtn.onClick([&] {
     SceneManager::updateName("menu");
@@ -36,6 +36,26 @@ void JoinGame::draw() {
 
   username.onClick();
   username.writeListener([&] {});
+  username.drawRaw();
+
+  gamecode.onClick();
+  gamecode.writeListener([&] {});
+  gamecode.drawRaw();
+
+  auto usernameText = smk::Text(font, L"Username");
+  usernameText.SetPosition(username.getX(), username.getY()-75);
+  window.Draw(usernameText);
+
+  auto codeText = smk::Text(font, L"Game code");
+  codeText.SetPosition(gamecode.getX(), gamecode.getY()-75);
+  window.Draw(codeText);
+
+  auto exitSymbol = smk::Text(font, L"|<-");
+  window.Draw(exitSymbol);
+
+  auto joinText = smk::Text(font, L"Join Game");
+  joinText.SetPosition(joinBtn.getX(), joinBtn.getY());
+  window.Draw(joinText);
 }
 
 void JoinGame::restart() {}

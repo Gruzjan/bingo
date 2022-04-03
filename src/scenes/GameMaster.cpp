@@ -19,7 +19,7 @@
 #include <algorithm>
 
 GameMaster::GameMaster(smk::Window &window) : window(window) {
-  this->inputBox = new InputBox(500, 150, 800, 50, window);
+  this->inputBox = new InputBox(500, 150, 800, 50, window, 48);
   inputBox->setColor(smk::Color::RGB(0.6, 0.4, 0.6));
   page = 0;
   words = 

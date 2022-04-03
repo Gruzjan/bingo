@@ -3,7 +3,7 @@
 #include <locale>
 #include <codecvt>
 
-InputBox::InputBox(int x, int y, int width, int height, smk::Window &window) {
+InputBox::InputBox(int x, int y, int width, int height, smk::Window &window, int fontSize) {
     this->x = x;
     this->y = y;
 
@@ -22,9 +22,11 @@ InputBox::InputBox(int x, int y, int width, int height, smk::Window &window) {
     UIElement.SetPosition(x, y);
     UIElement.SetColor(smk::Color::Blue); 
 
-    inputText = smk::Text(font, "");
+    inputText = smk::Text(font, input);
     inputText.SetColor(smk::Color::White);
     inputText.SetPosition(x, y);
+
+    font = smk::Font("/resources/SHPinscher-Regular.otf", fontSize);
 
     listener = window.input().MakeCharacterListener();
 }
@@ -113,7 +115,9 @@ void InputBox::draw() {
 
     window->Draw(UIElement);
     window->Draw(passwordsText);
-    window->Draw(inputText);
+    if (input.size() > 0) {
+        window->Draw(inputText);
+    }
 }
 
 smk::Transformable &InputBox::getInputBox(){
@@ -150,6 +154,9 @@ void InputBox::pushBackPassword(std::wstring password){
 
 void InputBox::drawRaw() {
     window->Draw(UIElement);
+    if (input.size() > 0) {
+        window->Draw(inputText);
+    }
 }
 
 smk::Text InputBox::getText() {

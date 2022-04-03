@@ -11,7 +11,7 @@
 class JoinGame : public Scene {
 private:
     std::string name = "JoinGameScene";
-    smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
+    smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 72);
     smk::Window &window;
     InputBox username;
     InputBox gamecode;
