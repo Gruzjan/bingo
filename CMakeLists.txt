@@ -23,7 +23,7 @@ target_compile_options(lysy-bingo PRIVATE -Wall -Wextra -pedantic -Werror)
 # Detect emscripten is used.
 if(EMSCRIPTEN)
 
-  set_property(TARGET smk-starter APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1 -s FETCH")
+  set_property(TARGET lysy-bingo APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1 -s FETCH")
 
   # Copy the index.html file.
   configure_file(
