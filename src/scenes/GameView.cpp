@@ -79,8 +79,16 @@ void GameView::draw() {
     board->draw(false);
     for(auto x : board->getTiles()){
       x->setText(new smk::Text(font, x->getPassword()));
+      if(x->getPassword().size() < 10)
+        x->getText().SetPosition(x->getX(), x->getY() + 175 / 2 - font.line_height() / 2);
+      else{
+        x->getText().SetPosition(x->getX(), x->getY());
+        if(x->getPassword().size() < 18)
+          x->getText().SetString(x->getPassword().substr(0, 8) + L"-\n" + x->getPassword().substr(8, 9));
+        else
+          x->getText().SetString(x->getPassword().substr(0, 8) + L"-\n" + x->getPassword().substr(8, 9) + L"\n...");
+      }
       x->getText().SetColor(smk::Color::Black);
-      x->getText().SetPosition(x->getX(), x->getY());
       window.Draw(x->getText());
     }
   }
