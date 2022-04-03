@@ -13,15 +13,17 @@ add_executable(lysy-bingo
 
 target_include_directories(lysy-bingo PRIVATE src)
 target_link_libraries(lysy-bingo PRIVATE smk)
+target_link_libraries(lysy-bingo PRIVATE nlohmann_json::nlohmann_json)
 
-set_target_properties(lysy-bingo PROPERTIES CXX_STANDARD 11)
+set_target_properties(lysy-bingo PROPERTIES CXX_STANDARD 11 COMPILE_FLAGS "-s USE_BOOST_HEADERS=1" LINK_FLAGS "-s USE_BOOST_HEADERS=1")
+
 
 target_compile_options(lysy-bingo PRIVATE -Wall -Wextra -pedantic -Werror)
 
 # Detect emscripten is used.
 if(EMSCRIPTEN)
 
-  set_property(TARGET lysy-bingo APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1")
+  set_property(TARGET smk-starter APPEND_STRING PROPERTY LINK_FLAGS  " -s WASM=1 -s FETCH")
 
   # Copy the index.html file.
   configure_file(
