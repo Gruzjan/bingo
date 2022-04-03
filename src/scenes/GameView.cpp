@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
@@ -12,15 +13,13 @@
 #include "headers/SceneManager.hpp"
 
 GameView::GameView(smk::Window &window) :window(window) {
-  board = new Board(window.width() / 2 - 450, 150, 895, 895, window);
+  board = new Board(window.width() / 2 - 450, 150, 0, 0, window);
 }
 
 void GameView::draw() {
-  if(!boardReady){
-    setBoard(true, 5, {L"siema", L"eniu", L"lubie", L"placki"}); // this should come from game creator
-    board->setTilesOnClickAction();
-    std::cerr << "test" << std::endl; 
-  }
+  if(!boardReady)
+    setBoard(5, true, {L"siema", L"eniu", L"lubie", L"placki"}); // this should come from game creator
+  board->setTilesOnClickAction();
   //====== SCENE TITLE ======
   auto sceneTitle = smk::Text(font, "The lysy bingo game");
   sceneTitle.SetPosition(window.width() / 2 - 175, 50);
@@ -49,10 +48,33 @@ void GameView::draw() {
 
   window.Draw(gameCodeText);
   window.Draw(nicknameText);
+  //====== BINGO BUTTON ======
+  Button bingoBtn(1600, 510, 120, 60, window);
+  bingoBtn.UIElement.SetColor(smk::Color::Grey);
+  bingoBtn.onClick([&] {
+    //send to backend
+  });
 
-  //====== REST ======
-  if(boardReady)
+  smk::Text bingoBtnTxt = smk::Text(font, "Bingo");
+  bingoBtnTxt.SetColor(smk::Color::Black);
+  bingoBtnTxt.SetPosition(bingoBtn.getX() + 10, bingoBtn.getY() + bingoBtn.height / 2 - font.line_height() / 2);
+
+  if(board->isBingo())
+    bingoBtn.UIElement.SetColor(smk::Color::White);
+  
+  bingoBtn.draw();
+  window.Draw(bingoBtnTxt);
+
+  //====== BOARD ======
+  if(boardReady){
     board->draw(false);
+    for(auto x : board->getTiles()){
+      x->setText(new smk::Text(font, x->getPassword()));
+      x->getText().SetColor(smk::Color::Black);
+      x->getText().SetPosition(x->getX(), x->getY());
+      window.Draw(x->getText());
+    }
+  }
 }
 
 void GameView::setPasswords(std::vector<std::wstring> passwords){
@@ -72,9 +94,9 @@ void GameView::setBoard(Board &board){
   boardReady = true;
 }
 
-void GameView::setBoard(bool freeTile, int size, std::vector<std::wstring> passwords){
-  board->setFreeTile(freeTile);
+void GameView::setBoard(int size, bool freeTile, std::vector<std::wstring> passwords){
   board->setSize(size);
+  board->setFreeTile(freeTile);
   board->setPasswords(passwords);
   setPasswords(passwords);
   

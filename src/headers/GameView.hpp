@@ -25,7 +25,7 @@ public:
     void setNickname(std::string);
     void setGameCode(std::string);
     void setBoard(Board&);
-    void setBoard(bool, int, std::vector<std::wstring>);
+    void setBoard(int, bool, std::vector<std::wstring>);
     ~GameView(){}
     void draw();
     void restart();
