@@ -2,6 +2,7 @@
 #include <smk/Window.hpp>
 #include <smk/Shape.hpp>
 #include <smk/Font.hpp>
+#include <nlohmann/json.hpp>
 
 #include "headers/Scene.hpp"
 #include "headers/InputBox.hpp"
@@ -15,10 +16,14 @@ private:
     std::vector<std::string> wordKeys;
     InputBox *inputBox;
     int page;
+    bool isTransfered = false;
+    std::string gameCode;
 public:
     GameMaster(smk::Window&);
     ~GameMaster() {};
     void draw();
     void restart();
     std::string getName();
+    void transferData(nlohmann::json);
+    bool checkTransfer();
 };

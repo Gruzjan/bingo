@@ -2,6 +2,8 @@
 #include <string>
 #include <numeric>
 #include <algorithm>
+#include <locale>
+#include <codecvt>
 
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
@@ -11,12 +13,14 @@
 #include <smk/Vertex.hpp>
 #include <smk/VertexArray.hpp>
 #include <smk/Text.hpp>
+#include <nlohmann/json.hpp>
 
 #include "headers/CreateGame.hpp"
 #include "headers/Button.hpp"
 #include "headers/InputBox.hpp"
 #include "headers/SceneManager.hpp"
 #include "headers/Tile.hpp"
+#include "headers/HTTPClient.hpp"
 
 CreateGame::CreateGame(smk::Window &window) : window(window) {
   this->inputBox = new InputBox(60, 150, 350, 820, window, 48);
@@ -204,17 +208,38 @@ void CreateGame::draw() {
   //====== CREATE BUTTON ======
   Button createBtn(window.width() / 2 - 100, 900, 200, 100, window);
   createBtn.onClick([&] {
-    SceneManager::updateName("GameMasterScene");
+    // It's very awkward but I don't have time to refactor this
+    // Note to everyone: move stored passwords from
+    // InputBox to this CreateGameScene
+    this->setPasswords(inputBox->getPasswords());
+
+    if ((board->getSize() == 4 || board->getSize() == 5) && this->getPasswords().size() > 5) {
+      std::vector<std::string> passwordsString;
+      for (std::wstring x : this->getPasswords()) {
+        passwordsString.push_back(std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(x));
+      }
+      nlohmann::json data = {
+        {"gameCode", this->gameCode},
+        {"words", passwordsString},
+        {"size", board->getSize()},
+        {"freeTile", board->getFreeTile()}
+      };
+      std::cerr << data.dump() << std::endl;
+
+      HTTPClient h("http://localhost:3000");
+      h.fetch("POST", "/create", data);
+      std::cerr << "backend hit" << std::endl;
+
+      SceneManager::updateName("GameMasterScene");
+    }
+    else {
+      std::cerr << "nuh uh" << std::endl;
+    }
   });
-  createBtn.draw();
 
   smk::Text createBtnTxt = smk::Text(font, "Create");
   createBtnTxt.SetPosition(createBtn.getX() + 50, createBtn.getY() + createBtn.height / 2 - font.line_height() / 2);
   createBtnTxt.SetColor(smk::Color::White);
-
-  createBtn.onClick([&] {
-    gameCode = generateCode();
-  });
 
   createBtn.draw();
   window.Draw(createBtnTxt);
@@ -234,6 +259,18 @@ std::string CreateGame::generateCode() {
   result.reserve(6);
   for(int i = 0; i < 6; i++)
     result += alphabet[rand() % (sizeof(alphabet) - 1)];
-    
+  
   return result;
+}
+
+void CreateGame::setPasswords(std::vector<std::wstring> passwords) {
+  this->passwords = passwords;
+}
+
+std::vector<std::wstring> CreateGame::getPasswords() {
+  return passwords;
+}
+
+std::string CreateGame::getGameCode() {
+  return gameCode;
 }

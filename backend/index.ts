@@ -37,9 +37,11 @@ app.post("/", async (req, res) => {
 });
 
 app.post("/create", async (req, res) => {
+  console.log("connection");
   console.log(req.body)
   if (req.body.words && Array.isArray(req.body.words)) {
     console.log("here");
+    /*
     // Generate a game code
     let code = crypto.randomBytes(4).toString("hex").toUpperCase();
     // Check if it already exists
@@ -60,6 +62,7 @@ app.post("/create", async (req, res) => {
         },
       });
     }
+    */
 
     // Remove ";" in words and join them with ";"
     // as a separator
@@ -71,8 +74,10 @@ app.post("/create", async (req, res) => {
     const result = await prisma.games.create({
       data: {
         isRunning: true,
-        gameCode: code,
+        gameCode: req.body.gameCode,
         words: wordsCleaned,
+        size: req.body.size,
+        freeTile: req.body.freeTile
       },
     });
 
@@ -136,6 +141,7 @@ app.post("/checkwin", async (req, res) => {
 });
 
 app.post("/changecorrect", async (req, res) => {
+  console.log("changing correctness");
   const game = await prisma.games.findFirst({
     where: {
       isRunning: true,

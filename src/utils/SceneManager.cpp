@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <smk/Window.hpp>
+#include <nlohmann/json.hpp>
 
 #include "headers/SceneManager.hpp"
 #include "headers/GameMenu.hpp"
@@ -44,4 +45,20 @@ void SceneManager::updateScene() {
 
 void SceneManager::updateName(std::string name) {
     sceneName = name;
+}
+
+void SceneManager::dataPipeline() {
+    if (sceneName == "GameMasterScene") {
+        auto input = scenesMap.find("CreateGameScene")->second;
+        CreateGame *c = dynamic_cast<CreateGame*>(input);
+        auto output = scenesMap.find(sceneName)->second;
+        GameMaster *g = dynamic_cast<GameMaster*>(output);
+        if (!g->checkTransfer()) {
+            nlohmann::json j = {
+                {"gameCode", c->getGameCode()},
+                {"passwords", c->getPasswords()},
+            };
+            g->transferData(j);
+        }
+   }
 }

@@ -1,6 +1,7 @@
 #include "headers/HTTPClient.hpp"
 #include <emscripten/fetch.h>
 #include <iostream>
+#include <cstdlib>
 
 HTTPClient::HTTPClient(std::string uri) : uri(uri) {}
 
@@ -28,12 +29,15 @@ void HTTPClient::fetch(std::string method, std::string path, nlohmann::json data
 
   const char * headers[] = {"Content-Type", "application/json", 0};
 
+  std::string copy = data.dump();
+  const char *newData = copy.c_str();
+
   attr.requestHeaders = headers;
-  attr.requestData = data.dump().c_str();
-  attr.requestDataSize = data.dump().size();
+  attr.requestData = (const char*) malloc(data.dump().size() * sizeof(char));
+  strcpy((char*)attr.requestData, newData);
+  attr.requestDataSize = strlen(attr.requestData);
   attr.onsuccess = success;
   attr.onerror = failure;
 
-  auto res = emscripten_fetch(&attr, (uri + path).c_str());
-  std::cerr << res->data << std::endl;
+  emscripten_fetch(&attr, (uri + path).c_str());
 }

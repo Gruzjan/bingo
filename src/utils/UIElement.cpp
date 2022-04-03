@@ -1,5 +1,6 @@
 #include "headers/UIElement.hpp"
 #include <smk/Text.hpp>
+#include <smk/Audio.hpp>
 
 int UIElement::getX() {
     return this->x;
