@@ -66,6 +66,12 @@ void Board::setPasswords(std::vector<std::wstring> passwords){
         previewTiles.at(i)->setPassword(passwords.at(index));
         passwords.erase(passwords.begin() + index);
     }
+
+    if(freeTile && size == 5){
+        tiles.at(24)->setPassword(tiles.at(12)->getPassword());
+        tiles.at(12)->setPassword(L"Free!");
+
+    }
 }
 
 void Board::setFreeTile(bool free){

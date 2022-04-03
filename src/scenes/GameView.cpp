@@ -18,7 +18,16 @@ GameView::GameView(smk::Window &window) :window(window) {
 
 void GameView::draw() {
   if(!boardReady)
-    setBoard(5, true, {L"siema", L"eniu", L"lubie", L"placki"}); // this should come from game creator
+    setBoard(5, true, {L"Energol", L"\"Przerwa jest\"", L"\"To jest proste\"",
+                                                            L"\"Mikisheesh\"", L"\"Wlochaty\"", L"\"Panie technik\"",
+                                                            L"Praca w grupach", L"Uwaga za mundur", L"Pompki",
+                                                            L"\"Lendzionek\"", L"\"Czego?\"", L"\"Co tam brzeczysz?\"",
+                                                            L"\"Dzieci\"", L"Zapowiedzana kartkowka", L"Zapowiedziany sprawdzian",
+                                                            L"Grzybowski incydent", L"Narzekanie na mazak", L"Musi byc C++",
+                                                            L"Zla nieobecnosc", L"*Puszcza film*", L"\"Nie psuj mi ...!\"",
+                                                            L"\"Krzesla!\"", L"Lagodniejsze traktowanie kobiet",
+                                                            L"Muzyka w tle", L"*Slychac klucze*", L"Godzina wychowawcza",
+                                                            L"Problem z pendrivem", L"Absurdalna uwaga", L"Absurdalna pochwala"}); // this should come from game creator
   board->setTilesOnClickAction();
   //====== SCENE TITLE ======
   auto sceneTitle = smk::Text(font, "The lysy bingo game");
