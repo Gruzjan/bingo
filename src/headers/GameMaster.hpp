@@ -11,7 +11,7 @@ private:
     std::string name = "GameMasterScene";
     smk::Window &window;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
-    std::map<std::string, bool> words;
+    std::map<std::string, bool> passwords;
     std::vector<std::string> wordKeys;
     InputBox *inputBox;
     int page;

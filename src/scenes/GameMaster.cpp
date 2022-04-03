@@ -22,7 +22,7 @@ GameMaster::GameMaster(smk::Window &window) : window(window) {
   this->inputBox = new InputBox(500, 150, 800, 50, window, 48);
   inputBox->setColor(smk::Color::RGB(0.6, 0.4, 0.6));
   page = 0;
-  words = 
+  passwords = 
   { {"Krzesla", 0}
   , {"Dzieci", 0}
   , {"Slychac klucze", 0}
@@ -40,7 +40,7 @@ GameMaster::GameMaster(smk::Window &window) : window(window) {
   , {"Grzybowski incydent", 0}
   , {"Grzybowski incydent v2", 0}
   };
-  for (const auto &key : words) {
+  for (const auto &key : passwords) {
       wordKeys.push_back(key.first);
   }
 }
@@ -91,7 +91,7 @@ void GameMaster::draw() {
         pagination(wordKeys, page, inputBox->getInputString());
 
     for (auto key : paginatedVector) {
-        std::map<std::string, bool>::iterator it = words.find(key); 
+        std::map<std::string, bool>::iterator it = passwords.find(key); 
         Button word(500, 100 + (150 * i), 1000, 100, window);
 
         if (it->second) word.setColor(smk::Color::Green);
