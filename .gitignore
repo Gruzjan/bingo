@@ -1,1 +1,5 @@
 build/
+.vscode/
+prisma/migrations/
+dist/
+node_modules/
