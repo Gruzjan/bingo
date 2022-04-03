@@ -19,8 +19,9 @@
 #include "headers/Tile.hpp"
 
 CreateGame::CreateGame(smk::Window &window) : window(window) {
+  this->inputBox = new InputBox(60, 150, 350, 820, window, 48);
   srand(time(NULL));
-  this->inputBox = new InputBox(60, 150, 350, 820, window);
+  this->inputBox = new InputBox(60, 150, 350, 820, window, 48);
   listener = window.input().MakeCharacterListener();
   board = new Board(1250, 150, 0, 0, window);
 
@@ -203,6 +204,10 @@ void CreateGame::draw() {
   window.Draw(gameCodeTxt);
   //====== CREATE BUTTON ======
   Button createBtn(window.width() / 2 - 100, 900, 200, 100, window);
+  createBtn.onClick([&] {
+    SceneManager::updateName("GameMasterScene");
+  });
+  createBtn.draw();
 
   smk::Text createBtnTxt = smk::Text(font, "Create");
   createBtnTxt.SetPosition(createBtn.getX() + 50, createBtn.getY() + createBtn.height / 2 - font.line_height() / 2);

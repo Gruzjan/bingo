@@ -1,7 +1,9 @@
 #include "headers/InputBox.hpp"
-#include "smk/Text.hpp"
+#include <smk/Text.hpp>
+#include <locale>
+#include <codecvt>
 
-InputBox::InputBox(int x, int y, int width, int height, smk::Window &window){
+InputBox::InputBox(int x, int y, int width, int height, smk::Window &window, int fontSize) {
     this->x = x;
     this->y = y;
 
@@ -20,6 +22,12 @@ InputBox::InputBox(int x, int y, int width, int height, smk::Window &window){
     UIElement.SetPosition(x, y);
     UIElement.SetColor(smk::Color::Blue); 
 
+    inputText = smk::Text(font, input);
+    inputText.SetColor(smk::Color::White);
+    inputText.SetPosition(x, y);
+
+    font = smk::Font("/resources/SHPinscher-Regular.otf", fontSize);
+
     listener = window.input().MakeCharacterListener();
 }
 
@@ -29,12 +37,12 @@ void InputBox::onClick(){
 
         if ((cursor.x >= this->x && cursor.x <= this->x + this->width)
         && (cursor.y >= this->y && cursor.y <= this->y + this->height)){
-            UIElement.SetColor(smk::Color::Cyan);
+            UIElement.SetColor(smk::Color::Grey);
             focused = true;
         }
         else{
             focused = false;
-            UIElement.SetColor(smk::Color::Blue);
+            UIElement.SetColor(smk::Color::RGBA(0.6, 0.4, 0.6, 0.5));
         }
     }
 }
@@ -104,15 +112,21 @@ void InputBox::draw() {
 
     window->Draw(UIElement);
     window->Draw(passwordsText);
-    window->Draw(inputText);
+    if (input.size() > 0) {
+        window->Draw(inputText);
+    }
 }
 
 smk::Transformable &InputBox::getInputBox(){
     return UIElement;
 }
 
-std::wstring InputBox::getInputText(){
+std::wstring InputBox::getInputText() {
     return input;
+}
+
+std::string InputBox::getInputString() {
+    return std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(input);
 }
 
 void InputBox::appendInputText(wchar_t text) {
@@ -133,6 +147,21 @@ void InputBox::setInputText(std::wstring text) {
 
 void InputBox::pushBackPassword(std::wstring password){
     passwords.push_back(password);
+}
+
+void InputBox::drawRaw() {
+    window->Draw(UIElement);
+    if (input.size() > 0) {
+        window->Draw(inputText);
+    }
+}
+
+smk::Text InputBox::getText() {
+    return inputText;
+}
+
+void InputBox::drawText() {
+    window->Draw(inputText);
 }
 
 void InputBox::setPasswords(std::vector<std::wstring> passwords){

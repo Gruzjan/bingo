@@ -3,6 +3,7 @@
 
 #include <smk/Window.hpp>
 #include <smk/Input.hpp>
+#include <smk/Color.hpp>
 #include "smk/Transformable.hpp"
 
 class UIElement {
@@ -17,5 +18,6 @@ public:
     int getY();
     void onClick(std::function<void()>);
     void onHover(std::function<void()>);
+    void setColor(glm::vec4);
     void draw();
 };
