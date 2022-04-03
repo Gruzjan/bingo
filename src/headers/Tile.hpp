@@ -11,15 +11,15 @@
 
 class Tile : virtual public UIElement{
 private:
-    smk::Text *text;
-    std::string password;
+    std::wstring password;
     bool checked = false;
 public:
     Tile(int, int, int, int, smk::Window&);
     void draw();
-    void setText(smk::Font&, std::string);
-    std::string getPassword();
+    std::wstring getPassword();
+    void setPassword(std::wstring);
+    void setCheck(bool);
     void switchCheck();
-    smk::Text &getText();
+    bool isChecked();
     smk::Transformable &getTile();
 };

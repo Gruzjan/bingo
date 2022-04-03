@@ -22,30 +22,35 @@ Tile::Tile(int x, int y, int width, int height, smk::Window &window) {
 }
 
 void Tile::draw(){
+    if(checked)
+        UIElement.SetColor(smk::Color::Green);
     window->Draw(UIElement);
-    //window->Draw(text);
 }
 
-void Tile::setText(smk::Font &font, std::string password){
+void Tile::setPassword(std::wstring password){
     this->password = password;
-    text = new smk::Text(font, password);
-    text->SetPosition(getX(), getY());
-    text->SetColor(smk::Color::Magenta);
 }
 
-std::string Tile::getPassword(){
+std::wstring Tile::getPassword(){
     return password;
+}
+
+void Tile::setCheck(bool check){ //TODO: WTF
+    std::cerr << "setCheck " << check << std::endl; 
+    checked = check;
+    
+    if(checked){
+        UIElement.SetColor(smk::Color::Yellow);
+        std::cerr << "siema kurwy" << std::endl; 
+    }
 }
 
 void Tile::switchCheck(){
     checked = !checked;
-    UIElement.SetColor(smk::Color::White);
-    if(checked)
-        UIElement.SetColor(smk::Color::Yellow);
 }
 
-smk::Text &Tile::getText(){
-    return *text;
+bool Tile::isChecked(){
+    return checked;
 }
 
 smk::Transformable &Tile::getTile() {

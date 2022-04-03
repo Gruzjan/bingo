@@ -63,13 +63,12 @@ void InputBox::writeListener(std::function<void(void)> f) {
         ) {
             input = input.substr(0, input.size() - 1);
             this->setInputText(input);
-            std::cerr << "deleter" << std::endl;
         }else if (
             (window->input().IsKeyPressed(GLFW_KEY_BACKSPACE))
             && input.size() == 0 && passwords.size() > 0
-        ) {
+        ) 
             passwords.pop_back();
-        }
+        
 
         // Enter handler
         else if 
@@ -79,7 +78,6 @@ void InputBox::writeListener(std::function<void(void)> f) {
         ) {
             input = L"";
             this->setInputText(input);
-            std::cerr << "enterer" << std::endl;
         }
         // Default here \/
     
@@ -88,10 +86,9 @@ void InputBox::writeListener(std::function<void(void)> f) {
     // Focused and key pressed
     // Cant be inside above `if` statement because
     // it will register all keys pressed before being focused
-    while(listener->Receive(&character) && focused) {
+    while(listener->Receive(&character) && focused)
         this->appendInputText(character);
-        std::cerr << "keyer" << std::endl;
-    }
+
 }
 
 void InputBox::draw() {
@@ -165,4 +162,16 @@ smk::Text InputBox::getText() {
 
 void InputBox::drawText() {
     window->Draw(inputText);
+}
+
+void InputBox::setPasswords(std::vector<std::wstring> passwords){
+    this->passwords = passwords;
+}
+
+std::vector<std::wstring> InputBox::getPasswords(){
+    return passwords;
+}
+
+void InputBox::clearPasswords(){
+    passwords.clear();
 }

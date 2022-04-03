@@ -34,4 +34,7 @@ public:
     void drawRaw();
     void drawText();
     smk::Text getText();
+    void setPasswords(std::vector<std::wstring>);
+    std::vector<std::wstring> getPasswords();
+    void clearPasswords();
 };

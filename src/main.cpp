@@ -14,6 +14,10 @@
 #include "utils/InputBox.cpp"
 #include "utils/Tile.cpp"
 #include "utils/Board.cpp"
+#include <iostream>
+#include "utils/HTTPClient.cpp"
+
+nlohmann::json HTTPClient::HTTPResponseData = {};
 
 std::string SceneManager::sceneName = "";
 
