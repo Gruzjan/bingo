@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <locale>
+#include <codecvt>
 
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
@@ -61,6 +63,10 @@ void GameView::draw() {
   Button bingoBtn(1600, 510, 120, 60, window);
   bingoBtn.UIElement.SetColor(smk::Color::Grey);
   bingoBtn.onClick([&] {
+    for (auto x : board->getWinningWords()) {
+      std::string tempStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(x);
+      std::cerr << tempStr << std::endl;
+    }
     //send to backend
   });
 

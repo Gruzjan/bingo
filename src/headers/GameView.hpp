@@ -18,7 +18,7 @@ private:
     Board *board;
     std::vector<std::wstring> passwords; // backend or gamecreator
     std::string gameCode = "ABCEFG"; // backend
-    std::string nickname = "Siema"; // backend (?)
+    std::string nickname = "Siema"; // backend (?) // pipeline akurat
 public:
     GameView(smk::Window&);
     void setPasswords(std::vector<std::wstring>);
