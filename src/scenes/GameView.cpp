@@ -14,17 +14,6 @@
 GameView::GameView(smk::Window &window) :window(window) {
     board = new Board(window.width() / 2 - 450, 150, 895, 895, window);
   };
-
-  for (auto& path : path_list) {
-    auto file = std::ifstream(path + "/bingo");
-    if (!file)
-      continue;
-
-    std::string line;
-    if (std::getline(file, line) && line == "bingo") {
-      resource_path = path;
-    }
-  }
 }
 
 void GameView::draw() {
