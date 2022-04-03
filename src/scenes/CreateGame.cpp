@@ -175,6 +175,9 @@ void CreateGame::draw() {
   window.Draw(gameCodeTxt);
   //====== CREATE BUTTON ======
   Button createBtn(window.width() / 2 - 100, 900, 200, 100, window);
+  createBtn.onClick([&] {
+    SceneManager::updateName("GameMasterScene");
+  });
   createBtn.draw();
 
   smk::Text createBtnTxt = smk::Text(font, "Create");

@@ -12,7 +12,7 @@ class GameMenu : public Scene {
 private:
     std::string name = "GameMenuScene";
     smk::Window &window;
-    smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
+    smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 96);
 public:
     GameMenu(smk::Window&);
     ~GameMenu(){}

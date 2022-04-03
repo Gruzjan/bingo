@@ -54,10 +54,8 @@ GameMenu::GameMenu(smk::Window &window) :window(window) {
 }
 
 void GameMenu::draw() {
-  Button createBtn(350, 250, 110, 40, window);
-  Button joinBtn(150, 250, 110, 40, window);
-
-  const float margin = 60.f;
+  Button createBtn(1000, 500, 450, 125, window);
+  Button joinBtn(500, 500, 450, 125, window);
 
   joinBtn.onClick([&] {
     SceneManager::updateName("JoinGameScene");
@@ -67,13 +65,20 @@ void GameMenu::draw() {
     SceneManager::updateName("CreateGameScene");
   });
 
-  auto text = smk::Text(font, "The lysy bingo game");
-  text.SetPosition(margin, margin);
-  text.SetColor(smk::Color::White);
+  auto text = smk::Text(font, "Lysy Bingo The Game");
+  text.SetPosition(600, 300);
+
+  auto joinText = smk::Text(font, "Join Game");
+  joinText.SetPosition(joinBtn.getX() + 50, joinBtn.getY() + 20);
+
+  auto createText = smk::Text(font, "Create Game");
+  createText.SetPosition(createBtn.getX() + 20, createBtn.getY() + 20);
 
   window.Draw(text);
   joinBtn.draw();
   createBtn.draw();
+  window.Draw(joinText);
+  window.Draw(createText);
 }
 
 void GameMenu::restart() {

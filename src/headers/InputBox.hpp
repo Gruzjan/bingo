@@ -3,10 +3,11 @@
 #include <functional>
 #include <vector>
 
-#include "smk/Window.hpp"
-#include "smk/Color.hpp"
-#include "smk/Shape.hpp"
-#include "smk/Input.hpp"
+#include <smk/Window.hpp>
+#include <smk/Color.hpp>
+#include <smk/Shape.hpp>
+#include <smk/Input.hpp>
+#include <smk/Font.hpp>
 
 #include "headers/UIElement.hpp"
 
@@ -15,7 +16,7 @@ private:
     std::wstring input;
     bool focused = false;
     smk::Font font = smk::Font("/resources/SHPinscher-Regular.otf", 48);
-    smk::Text inputText = smk::Text(font, L"");
+    smk::Text inputText;
     smk::Input::CharacterListener listener;
     wchar_t character;
     std::vector<std::wstring> passwords;
@@ -26,7 +27,11 @@ public:
     void draw();
     smk::Transformable &getInputBox();
     std::wstring getInputText();
+    std::string getInputString();
     void setInputText(std::wstring);
     void appendInputText(wchar_t);
     void pushBackPassword(std::wstring);
+    void drawRaw();
+    void drawText();
+    smk::Text getText();
 };

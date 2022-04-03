@@ -1,4 +1,5 @@
 #include "headers/UIElement.hpp"
+#include <smk/Text.hpp>
 
 int UIElement::getX() {
     return this->x;
@@ -37,4 +38,8 @@ void UIElement::onHover(const std::function<void()> f) {
 
 void UIElement::draw() {
     window->Draw(UIElement);
+}
+
+void UIElement::setColor(glm::vec4 color) {
+    UIElement.SetColor(color);
 }
