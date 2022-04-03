@@ -12,17 +12,7 @@
 #include "headers/SceneManager.hpp"
 
 GameView::GameView(smk::Window &window) :window(window) {
-    board = new Board(window.width() / 2 - 450, 150, 0, 0, window);
-    std::string resource_path;
-    std::vector<std::string> path_list = {
-      // Code build and run inside ${CMAKE_CURRENT_DIRECTORY}/build
-      "./resources",
-
-      // Code build and run inside ${CMAKE_CURRENT_DIRECTORY}
-      "../resources",
-
-      // Code build for WebAssembly.
-      "/resources",
+    board = new Board(window.width() / 2 - 450, 150, 895, 895, window);
   };
 
   for (auto& path : path_list) {
@@ -41,7 +31,7 @@ void GameView::draw() {
   if(!boardReady){
     setBoard(true, 5, {L"siema", L"eniu", L"lubie", L"placki"}); // this should come from game creator
     board->setTilesOnClickAction();
-    std::cerr << "test" << std::endl;
+    std::cerr << "test" << std::endl; 
   }
   //====== SCENE TITLE ======
   auto sceneTitle = smk::Text(font, "The lysy bingo game");

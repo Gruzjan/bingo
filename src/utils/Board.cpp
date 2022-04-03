@@ -17,11 +17,11 @@ Board::Board(int x, int y, int width, int height, smk::Window &window) {
     UIElement.SetScaleX(width);
     UIElement.SetScaleY(height);
     UIElement.SetPosition(x, y);
-    UIElement.SetColor(smk::Color::Blue);
+    UIElement.SetColor(smk::Color::Cyan);
 }
 
 void Board::draw(bool preview){
-    //window->Draw(UIElement);
+    window->Draw(UIElement);
     for(unsigned long i = 0; i < tiles.size(); i++){
         if(!preview)
             tiles.at(i).draw();
