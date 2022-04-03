@@ -12,8 +12,7 @@
 #include "headers/SceneManager.hpp"
 
 GameView::GameView(smk::Window &window) :window(window) {
-    board = new Board(window.width() / 2 - 450, 150, 895, 895, window);
-  };
+  board = new Board(window.width() / 2 - 450, 150, 895, 895, window);
 }
 
 void GameView::draw() {
