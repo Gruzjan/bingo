@@ -61,4 +61,18 @@ void SceneManager::dataPipeline() {
             g->transferData(j);
         }
    }
+   if (sceneName == "GameViewScene") {
+       auto input = scenesMap.find("JoinGameScene")->second;
+       JoinGame *o = dynamic_cast<JoinGame*>(input);
+       auto output = scenesMap.find(sceneName)->second;
+       GameView *g = dynamic_cast<GameView*>(output);
+       if (!g->checkTransfer()) {
+           nlohmann::json j = {
+               {"words", o->getPasswords()},
+               {"gameCode", o->getGameCode()},
+               {"username", o->getUsername()}
+           };
+           g->transferData(j);
+       }
+   }
 }

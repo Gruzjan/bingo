@@ -137,3 +137,11 @@ void Board::setTilesOnClickAction(){
 std::vector<std::wstring> Board::getWinningWords() {
     return this->winningWords;
 }
+
+void Board::uncheckAll() {
+    for (auto x : tiles) {
+        if (x->isChecked()) {
+            x->switchCheck();
+        }
+    }
+}

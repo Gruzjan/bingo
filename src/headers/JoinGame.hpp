@@ -15,9 +15,14 @@ private:
     smk::Window &window;
     InputBox username;
     InputBox gamecode;
+    std::vector<std::string> passwords;
 public:
     JoinGame(smk::Window&);
     void draw();
     void restart();
     std::string getName();
+    void setPasswords(std::string);
+    std::vector<std::string> getPasswords();
+    std::string getUsername();
+    std::string getGameCode();
 };
