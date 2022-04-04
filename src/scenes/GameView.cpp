@@ -18,7 +18,7 @@
 #include "headers/GameView.hpp"
 #include "headers/SceneManager.hpp"
 
-EM_ASYNC_JS(bool, checkwin, (const char * words), {
+EM_ASYNC_JS(bool, checkwin, (const char * words, const char * code), {
   const options = {
     method: "post",
     headers: {
@@ -26,7 +26,8 @@ EM_ASYNC_JS(bool, checkwin, (const char * words), {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      words: UTF8ToString(words)
+      words: UTF8ToString(words),
+      gameCode: UTF8ToString(code)
     })
   };
   const res = await fetch("http://localhost:3000/checkwin", options);
@@ -86,9 +87,10 @@ void GameView::draw() {
       }
       std::string joinedString = boost::algorithm::join(tempWords, ";");
       std::cerr << joinedString << std::endl;
-      bool isWon = checkwin(joinedString.c_str());
+      bool isWon = checkwin(joinedString.c_str(), gameCode.c_str());
       std::cerr << isWon << std::endl;
-      if (isWon) {
+      if (isWon == 1) {
+        std::cout << "huh?" << std::endl;
         board->uncheckAll();
         std::random_shuffle(passwords.begin(), passwords.end());
         std::cerr << "won?" << std::endl;

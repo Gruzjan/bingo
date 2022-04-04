@@ -103,22 +103,24 @@ app.post("/join", async (req, res) => {
 
 app.post("/checkwin", async (req, res) => {
   console.log("checking win");
-  const game = await prisma.games.findFirst({
+  const game = await prisma.games.findUnique({
     where: {
-      isRunning: true,
       gameCode: req.body.gameCode,
-    },
+    }
   });
 
   const winningWords = game?.winningWords.split(";");
   const userWords = req.body.words.split(";");
-  console.log("Winning words:")
-  console.log(game?.winningWords);
+  if (game) {
+    console.log("Winning words:")
+    console.log(game.winningWords.split(";"));
+  }
   console.log("User words:");
   console.log(userWords);
 
   if (
-    winningWords?.every((word: string) => userWords.includes(word)) &&
+    winningWords &&
+    userWords?.every((word: string) => winningWords.includes(word)) &&
     winningWords.length > 4
   ) {
     res.send({
@@ -151,17 +153,19 @@ app.post("/changecorrect", async (req, res) => {
 
     else
       winningWords.splice(winningWords.indexOf(req.body.word), 1);
+
+    let finalWords = winningWords.join(";")
     
     const result = await prisma.games.update({
       where: {
         gameCode: req.body.gameCode
       },
       data: {
-        winningWords: winningWords.join(";")
+        winningWords: finalWords
       }
     });
 
-    console.log(result.winningWords);
+    console.log(result);
 
     res.send({
       status: "ok",

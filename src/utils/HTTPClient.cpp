@@ -12,7 +12,7 @@ void success(emscripten_fetch_t *fetch) {
         {"status", "ok"},
     };
     std::cerr << HTTPClient::HTTPResponseData["status"] << std::endl;
-    //emscripten_fetch_close(fetch);
+    emscripten_fetch_close(fetch);
 }
 
 void failure(emscripten_fetch_t *fetch) {
