@@ -20,15 +20,37 @@
 #include "utils/HTTPClient.cpp"
 #include <locale>
 #include <codecvt>
+#include <emscripten.h>
 
 nlohmann::json HTTPClient::HTTPResponseData = {};
 
 std::string SceneManager::sceneName = "";
 
+EM_ASYNC_JS(char *, test, (const char * code), {
+  const options = {
+    method: "post",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      gameCode: UTF8ToString(code)
+    })
+  };
+  const res = await fetch("http://localhost:3000/join", options);
+  const test = await res.json();
+  const text = test["words"];
+  var lengthBytes = lengthBytesUTF8(text)+1;
+  var stringOnWasmHeap = _malloc(lengthBytes);
+  stringToUTF8(text, stringOnWasmHeap, lengthBytes);
+
+  return stringOnWasmHeap;
+});
+
 int main() {
   auto window = smk::Window(1920, 1080, "scena1");
   SceneManager manager(window);
-  smk::Audio audio;
+  bool fetched = false;;
 
   auto texture = smk::Texture("/resources/background-pixel.png");
   auto background = smk::Shape::Square();
@@ -39,6 +61,12 @@ int main() {
   window.ExecuteMainLoop([&] {
     window.PoolEvents();
     window.Clear(smk::Color::Black);
+    if(!fetched) {
+      //std::string c = "ECIELY";
+      //const char *code = c.c_str();
+      //std::cerr << test(code) << std::endl;
+      fetched = true;
+    }
 
     window.Draw(background);
     manager.updateScene();

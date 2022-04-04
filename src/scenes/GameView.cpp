@@ -3,6 +3,10 @@
 #include <string>
 #include <locale>
 #include <codecvt>
+#include <random>
+#include <algorithm>
+#include <boost/algorithm/string/join.hpp>
+#include <emscripten.h>
 
 #include <smk/Color.hpp>
 #include <smk/Shape.hpp>
@@ -14,22 +18,33 @@
 #include "headers/GameView.hpp"
 #include "headers/SceneManager.hpp"
 
+EM_ASYNC_JS(bool, checkwin, (const char * words, const char * code), {
+  const options = {
+    method: "post",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      words: UTF8ToString(words),
+      gameCode: UTF8ToString(code)
+    })
+  };
+  const res = await fetch("http://localhost:3000/checkwin", options);
+  const test = await res.json();
+  console.log(test);
+  const text = test["won"];
+
+  return text
+});
+
 GameView::GameView(smk::Window &window) :window(window) {
   board = new Board(window.width() / 2 - 450, 150, 0, 0, window);
 }
 
 void GameView::draw() {
   if(!boardReady)
-    setBoard(5, true, {L"Energol", L"\"Przerwa jest\"", L"\"To jest proste\"",
-                                                            L"\"Mikisheesh\"", L"\"Wlochaty\"", L"\"Panie technik\"",
-                                                            L"Praca w grupach", L"Uwaga za mundur", L"Pompki",
-                                                            L"\"Lendzionek\"", L"\"Czego?\"", L"\"Co tam brzeczysz?\"",
-                                                            L"\"Dzieci\"", L"Zapowiedzana kartkowka", L"Zapowiedziany sprawdzian",
-                                                            L"Grzybowski incydent", L"Narzekanie na mazak", L"Musi byc C++",
-                                                            L"Zla nieobecnosc", L"*Puszcza film*", L"\"Nie psuj mi ...!\"",
-                                                            L"\"Krzesla!\"", L"Lagodniejsze traktowanie kobiet",
-                                                            L"Muzyka w tle", L"*Slychac klucze*", L"Godzina wychowawcza",
-                                                            L"Problem z pendrivem", L"Absurdalna uwaga", L"Absurdalna pochwala"}); // this should come from game creator
+    setBoard(5, true, passwords); // this should come from game creator // it came :O
   board->setTilesOnClickAction();
   //====== SCENE TITLE ======
   auto sceneTitle = smk::Text(font, "The lysy bingo game");
@@ -63,11 +78,25 @@ void GameView::draw() {
   Button bingoBtn(1600, 510, 120, 60, window);
   bingoBtn.UIElement.SetColor(smk::Color::Grey);
   bingoBtn.onClick([&] {
-    for (auto x : board->getWinningWords()) {
-      std::string tempStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(x);
-      std::cerr << tempStr << std::endl;
+    if (board->isBingo()) {
+      std::vector<std::string> tempWords;
+      for (auto x : board->getWinningWords()) {
+        std::string tempStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(x);
+        boardReady = false;
+        tempWords.push_back(tempStr);
+      }
+      std::string joinedString = boost::algorithm::join(tempWords, ";");
+      std::cerr << joinedString << std::endl;
+      bool isWon = checkwin(joinedString.c_str(), gameCode.c_str());
+      std::cerr << isWon << std::endl;
+      if (isWon == 1) {
+        std::cout << "huh?" << std::endl;
+        board->uncheckAll();
+        std::random_shuffle(passwords.begin(), passwords.end());
+        std::cerr << "won?" << std::endl;
+      }
     }
-    //send to backend
+    //send to backend // sent
   });
 
   smk::Text bingoBtnTxt = smk::Text(font, "Bingo");
@@ -131,4 +160,20 @@ void GameView::restart() {
 
 std::string GameView::getName() {
   return this->name;
+}
+
+bool GameView::checkTransfer() {
+  return this->isTransfered;
+}
+
+void GameView::transferData(nlohmann::json j) {
+  this->nickname = j["username"];
+  this->gameCode = j["gameCode"];
+  for (std::string x : j["words"]) {
+    std::wstring tempStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(x);
+    passwords.push_back(tempStr);
+  }
+  std::cerr << gameCode << std::endl;
+  std::random_shuffle(passwords.begin(), passwords.end());
+  isTransfered = true;
 }

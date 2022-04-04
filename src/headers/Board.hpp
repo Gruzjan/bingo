@@ -31,4 +31,5 @@ public:
     smk::Transformable &getBoard();
     void setTilesOnClickAction();
     std::vector<std::wstring> getWinningWords();
+    void uncheckAll();
 };

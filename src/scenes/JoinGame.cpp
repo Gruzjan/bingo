@@ -8,11 +8,38 @@
 #include <smk/Vertex.hpp>
 #include <smk/VertexArray.hpp>
 #include <smk/Text.hpp>
+#include <emscripten.h>
+#include <boost/algorithm/string/split.hpp> 
+#include <boost/algorithm/string/classification.hpp>
 
 #include "headers/JoinGame.hpp"
 #include "headers/Button.hpp"
 #include "headers/SceneManager.hpp"
 #include "headers/InputBox.hpp"
+#include "headers/HTTPClient.hpp"
+#include "nlohmann/json.hpp"
+
+EM_ASYNC_JS(char *, join, (const char * code), {
+  const options = {
+    method: "post",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      gameCode: UTF8ToString(code)
+    })
+  };
+  const res = await fetch("http://localhost:3000/join", options);
+  const test = await res.json();
+  console.log(test);
+  const text = test["words"];
+  var lengthBytes = lengthBytesUTF8(text)+1;
+  var stringOnWasmHeap = _malloc(lengthBytes);
+  stringToUTF8(text, stringOnWasmHeap, lengthBytes);
+
+  return stringOnWasmHeap;
+});
 
 JoinGame::JoinGame(smk::Window &window) 
   : window(window), 
@@ -24,7 +51,14 @@ void JoinGame::draw() {
   Button backBtn(0, 0, 180, 100, window);
 
   joinBtn.onClick([&] {
-    SceneManager::updateName("GameViewScene");
+    std::string temp = gamecode.getInputString();
+    const char *code = temp.c_str();
+    char *res = join(code);
+    std::string words = res;
+    if (words.size() > 0) {
+      this->setPasswords(words);
+      SceneManager::updateName("GameViewScene");
+    }
   });
 
   backBtn.onClick([&] {
@@ -62,4 +96,20 @@ void JoinGame::restart() {}
 
 std::string JoinGame::getName() {
   return this->name;
+}
+
+void JoinGame::setPasswords(std::string raw) {
+  boost::split(passwords, raw, boost::is_any_of(";"), boost::token_compress_on);
+}
+
+std::vector<std::string> JoinGame::getPasswords() {
+  return this->passwords;
+}
+
+std::string JoinGame::getUsername() {
+  return username.getInputString();
+}
+
+std::string JoinGame::getGameCode() {
+  return gamecode.getInputString();
 }

@@ -2,12 +2,16 @@
 #include <emscripten/fetch.h>
 #include <iostream>
 #include <cstdlib>
+#include <nlohmann/json.hpp>
 
 HTTPClient::HTTPClient(std::string uri) : uri(uri) {}
 
 void success(emscripten_fetch_t *fetch) {
-    HTTPClient::HTTPResponseData = fetch->data;
-    std::cerr << HTTPClient::HTTPResponseData.dump() << std::endl;
+    std::cerr << fetch->data << std::endl;
+    HTTPClient::HTTPResponseData = {
+        {"status", "ok"},
+    };
+    std::cerr << HTTPClient::HTTPResponseData["status"] << std::endl;
     emscripten_fetch_close(fetch);
 }
 

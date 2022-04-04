@@ -5,6 +5,7 @@
 #include <smk/Shape.hpp>
 #include <smk/Window.hpp>
 #include <smk/Font.hpp>
+#include <nlohmann/json.hpp>
 
 #include "headers/Board.hpp"
 #include "headers/Scene.hpp"
@@ -19,6 +20,7 @@ private:
     std::vector<std::wstring> passwords; // backend or gamecreator
     std::string gameCode = "ABCEFG"; // backend
     std::string nickname = "Siema"; // backend (?) // pipeline akurat
+    bool isTransfered = false;
 public:
     GameView(smk::Window&);
     void setPasswords(std::vector<std::wstring>);
@@ -30,4 +32,6 @@ public:
     void draw();
     void restart();
     std::string getName();
+    bool checkTransfer();
+    void transferData(nlohmann::json);
 };

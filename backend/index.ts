@@ -29,6 +29,13 @@ const app = express();
 // Middleware for handling JSON
 app.use(express.json());
 
+app.get("/", async (req, res) => {
+  console.log(req.body);
+  res.send({
+    test: "aaaaaa"
+  });
+})
+
 app.post("/", async (req, res) => {
   console.log(req.body);
   res.send({
@@ -41,28 +48,6 @@ app.post("/create", async (req, res) => {
   console.log(req.body)
   if (req.body.words && Array.isArray(req.body.words)) {
     console.log("here");
-    /*
-    // Generate a game code
-    let code = crypto.randomBytes(4).toString("hex").toUpperCase();
-    // Check if it already exists
-    let uniqueCode = await prisma.games.findMany({
-      where: {
-        isRunning: true,
-        gameCode: code,
-      },
-    });
-
-    // Generate the code as long as it's unique
-    while (uniqueCode.length) {
-      code = crypto.randomBytes(4).toString("hex").toUpperCase();
-      uniqueCode = await prisma.games.findMany({
-        where: {
-          isRunning: true,
-          gameCode: code,
-        },
-      });
-    }
-    */
 
     // Remove ";" in words and join them with ";"
     // as a separator
@@ -94,6 +79,8 @@ app.post("/create", async (req, res) => {
 });
 
 app.post("/join", async (req, res) => {
+  console.log("join");
+  console.log(req.body);
   const game = await prisma.games.findFirst({
     where: {
       isRunning: true,
@@ -115,27 +102,35 @@ app.post("/join", async (req, res) => {
 });
 
 app.post("/checkwin", async (req, res) => {
-  const game = await prisma.games.findFirst({
+  console.log("checking win");
+  const game = await prisma.games.findUnique({
     where: {
-      isRunning: true,
       gameCode: req.body.gameCode,
-    },
+    }
   });
 
   const winningWords = game?.winningWords.split(";");
+  const userWords = req.body.words.split(";");
+  if (game) {
+    console.log("Winning words:")
+    console.log(game.winningWords.split(";"));
+  }
+  console.log("User words:");
+  console.log(userWords);
 
   if (
-    winningWords?.every((word: string) => req.body.words.includes(word)) &&
-    winningWords.length > 0
+    winningWords &&
+    userWords?.every((word: string) => winningWords.includes(word)) &&
+    winningWords.length > 4
   ) {
     res.send({
       status: "ok",
-      won: true,
+      won: 1,
     });
   } else {
     res.send({
       status: "ok",
-      won: false,
+      won: 0,
     });
   }
 });
@@ -159,14 +154,18 @@ app.post("/changecorrect", async (req, res) => {
     else
       winningWords.splice(winningWords.indexOf(req.body.word), 1);
 
+    let finalWords = winningWords.join(";")
+    
     const result = await prisma.games.update({
       where: {
         gameCode: req.body.gameCode
       },
       data: {
-        winningWords: winningWords.join(";")
+        winningWords: finalWords
       }
     });
+
+    console.log(result);
 
     res.send({
       status: "ok",
